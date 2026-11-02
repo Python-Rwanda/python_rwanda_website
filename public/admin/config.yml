@@ -1,0 +1,223 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+#
+# Sveltia CMS configuration (https://sveltiacms.app/en/docs).
+# Organizers edit the site at https://<site>/admin/ and every save is a commit to `main`.
+
+backend:
+  name: github
+  repo: OWNER/REPO # TODO: the GitHub repository, e.g. python-rwanda/website
+  branch: main
+  # TODO: URL of the Sveltia CMS Authenticator (Cloudflare Worker) for "Sign in with GitHub".
+  # Until it is set, organizers can use "Sign in with Token". See CONTRIBUTING.md.
+  # base_url: https://sveltia-cms-auth.<account>.workers.dev
+
+# Photos uploaded to the repository (logos, a cover, a few photos).
+media_folder: /public/media/uploads
+public_folder: /media/uploads
+
+media_libraries:
+  default:
+    config:
+      slugify_filename: true
+      max_file_size: 5000000 # 5 MB; bigger photos belong in Cloudinary
+  # Photo galleries live in Cloudinary. The image picker shows a Cloudinary tab
+  # once these two values are filled in (Cloudinary → Settings → API Keys).
+  # Never put the API *secret* here; this file is public.
+  # cloudinary:
+  #   config:
+  #     cloud_name: YOUR_CLOUD_NAME
+  #     api_key: "YOUR_API_KEY"
+  #     folder: { path: events }
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  # ── Events ──────────────────────────────────────────────────────────────
+  - name: events
+    label: Events
+    label_singular: Event
+    icon: event
+    folder: /content/events
+    extension: md
+    format: yaml-frontmatter
+    # The file name becomes the URL: /events/2026-11-06-code-research-ai
+    slug: "{{start}}-{{slug}}"
+    identifier_field: title
+    summary: "{{start}} · {{title}}"
+    table_columns: [title, start, type]
+    sortable_fields:
+      fields: [start, title]
+      default: { field: start, direction: descending }
+    fields:
+      - { name: title, label: Title }
+      - name: type
+        label: Type
+        widget: select
+        options: [Bootcamp, Meetup, Conference, Workshop, Webinar, Talk]
+      - name: start
+        label: Start date
+        widget: datetime
+        type: date
+        hint: The site moves the event from "Upcoming" to "Past" automatically after this date (or the end date).
+      - { name: end, label: End date (multi-day events only), widget: datetime, type: date, required: false }
+      - name: time
+        label: Start time (Kigali, 24h)
+        required: false
+        pattern: ['^\d{2}:\d{2}$', "Use a time like 18:00"]
+        hint: Optional, e.g. 18:00. Used for the countdown.
+      - name: date_label
+        label: Date text override
+        required: false
+        hint: Optional. Replaces the generated date, e.g. "November 2026" when the exact day is not set yet.
+      - { name: where, label: Where / speaker line, hint: "Venue, or the speaker line for online events." }
+      - { name: summary, label: Summary (1–2 sentences), widget: text }
+      - { name: rsvp, label: RSVP / registration link, required: false }
+      - name: cover
+        label: Cover photo
+        widget: image
+        required: false
+        hint: Shown on event cards and at the top of the event page.
+      - { name: cover_alt, label: Cover photo description (for screen readers), required: false }
+      - name: cover_position
+        label: Cover crop position
+        required: false
+        hint: Optional, e.g. "50% 30%" to show more of the top of the photo.
+      - name: gallery
+        label: Photos
+        widget: image
+        multiple: true
+        max: 80
+        required: false
+        hint: Pick from Cloudinary for full photo sets. Upload to the repository only for a handful of photos.
+      - name: video
+        label: Short video loop
+        required: false
+        hint: Path or URL to an .mp4 of a few MB. Long videos belong on Instagram or YouTube (add them under Links).
+      - name: speakers
+        label: Speakers
+        label_singular: Speaker
+        widget: list
+        required: false
+        summary: "{{name}}"
+        fields:
+          - { name: name, label: Name }
+          - { name: role, label: Role, required: false }
+      - name: links
+        label: Links (slides, recording, materials)
+        label_singular: Link
+        widget: list
+        required: false
+        summary: "{{label}}"
+        fields:
+          - { name: label, label: Label }
+          - { name: url, label: URL }
+      - name: glyph
+        label: Code text on generated artwork
+        required: false
+        hint: Shown when there is no photo, e.g. "import pandas".
+      - { name: body, label: Write-up, widget: richtext, required: false }
+
+  # ── Site settings & lists ───────────────────────────────────────────────
+  - name: settings
+    label: Site
+    icon: settings
+    files:
+      - name: site
+        label: Site settings
+        file: /content/site.yaml
+        fields:
+          - name: links
+            label: Links
+            widget: object
+            fields:
+              - { name: whatsapp, label: WhatsApp community invite link }
+              - { name: linkedin, label: LinkedIn }
+              - { name: instagram, label: Instagram }
+              - { name: instagram_handle, label: Instagram handle (without @) }
+              - { name: email, label: Contact email }
+          - name: hero
+            label: Home page hero
+            widget: object
+            fields:
+              - { name: title, label: Title }
+              - { name: eyebrow, label: Small text above the title }
+              - { name: tagline, label: Tagline, widget: text }
+              - { name: video, label: Background video (.mp4 path or URL) }
+              - { name: poster, label: Image shown while the video loads, widget: image }
+          - name: about
+            label: About text
+            widget: object
+            fields:
+              - { name: heading, label: Home page heading }
+              - { name: short, label: Home page paragraph, widget: text }
+              - { name: intro, label: About page intro, widget: text }
+              - { name: mission, label: Mission, widget: text }
+              - { name: mission_detail, label: Mission detail, widget: text }
+              - { name: collage, label: About page photos (4), widget: image, multiple: true, max: 4 }
+          - name: page_images
+            label: Page header photos
+            widget: object
+            fields:
+              - { name: events, label: Events, widget: image }
+              - { name: about, label: About, widget: image }
+              - { name: get_involved, label: Get involved, widget: image }
+              - { name: sponsors, label: Sponsors, widget: image }
+              - { name: upcoming_fallback, label: Upcoming panel (when the event has no cover), widget: image }
+              - { name: join, label: Blue "join" band, widget: image }
+          - name: forms
+            label: Forms (optional; email is used when empty)
+            widget: object
+            required: false
+            fields:
+              - { name: talk_proposal, label: Talk proposal form URL, required: false }
+              - { name: volunteer, label: Volunteer form URL, required: false }
+              - { name: host_event, label: Host an event form URL, required: false }
+
+      - name: programs
+        label: What we do
+        file: /content/programs.yaml
+        fields:
+          - name: programs
+            label: Programs
+            label_singular: Program
+            widget: list
+            root: true
+            summary: "{{name}}"
+            fields:
+              - { name: name, label: Name }
+              - { name: text, label: Text, widget: text }
+
+      - name: partners
+        label: Partners & sponsors
+        file: /content/partners.yaml
+        fields:
+          - name: partners
+            label: Partners
+            label_singular: Partner
+            widget: list
+            root: true
+            summary: "{{name}}"
+            fields:
+              - { name: name, label: Name }
+              - { name: note, label: 'Short note (e.g. "Workshop host, Oct 2026")', required: false }
+              - { name: url, label: Website, required: false }
+              - { name: logo, label: Logo, widget: image, required: false }
+
+      - name: team
+        label: Organizers
+        file: /content/team.yaml
+        fields:
+          - name: team
+            label: Organizers
+            label_singular: Organizer
+            widget: list
+            root: true
+            required: false
+            summary: "{{name}}"
+            fields:
+              - { name: name, label: Name }
+              - { name: role, label: Role }
+              - { name: photo, label: Photo, widget: image, required: false }
+              - { name: linkedin, label: LinkedIn URL, required: false }

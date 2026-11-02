@@ -1,0 +1,23 @@
+# Rebuilds the live site every night so events move from "Upcoming" to "Past"
+# on their own. Needs one repository secret: DEPLOY_HOOK_URL
+# (Vercel: Project → Settings → Git → Deploy Hooks; Cloudflare Pages: Settings → Builds → Deploy hooks).
+name: Nightly rebuild
+
+on:
+  schedule:
+    - cron: "5 22 * * *" # 00:05 in Kigali (UTC+2)
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "DEPLOY_HOOK_URL secret is not set; skipping."
+            exit 0
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK_URL"

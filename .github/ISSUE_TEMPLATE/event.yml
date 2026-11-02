@@ -1,0 +1,29 @@
+name: Add or update an event
+description: Ask the organizers to publish an event on the website.
+labels: [content]
+body:
+  - type: input
+    id: title
+    attributes: { label: Event title }
+    validations: { required: true }
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options: [Meetup, Workshop, Webinar, Bootcamp, Talk, Conference]
+    validations: { required: true }
+  - type: input
+    id: when
+    attributes: { label: Date and time (Kigali), placeholder: "2026-11-28 18:00" }
+    validations: { required: true }
+  - type: input
+    id: where
+    attributes: { label: Venue or online link }
+    validations: { required: true }
+  - type: textarea
+    id: summary
+    attributes: { label: Short description }
+    validations: { required: true }
+  - type: input
+    id: rsvp
+    attributes: { label: Registration link (optional) }

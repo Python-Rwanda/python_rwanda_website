@@ -1,0 +1,9 @@
+# "What we do", shown on Home and About.
+- name: Bootcamps
+  text: Multi-week, hands-on training in Python and Django, from first script to deployed web app.
+- name: University workshops
+  text: Practical sessions on campus, like data analysis with real datasets at MKU Rwanda.
+- name: Meetups
+  text: In-person talks, panels and conversation for the Python community in Kigali.
+- name: Webinars
+  text: Online sessions with researchers, founders and engineers from Rwanda and abroad.

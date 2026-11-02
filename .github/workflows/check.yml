@@ -1,0 +1,26 @@
+# Runs on every pull request and push to main.
+# The build reads and validates every file in content/, so a bad file (missing date,
+# unknown event type, broken link...) fails this check with a message naming the file.
+
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build

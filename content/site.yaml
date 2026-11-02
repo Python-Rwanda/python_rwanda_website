@@ -1,0 +1,45 @@
+# Site-wide settings. Edit here or in the editor at /admin → Site → "Site settings".
+# Images can be a path under /media/... (stored in this repo) or a full Cloudinary URL.
+
+links:
+  # TODO: replace with the real WhatsApp community invite link.
+  whatsapp: https://www.linkedin.com/company/python-rwanda/
+  linkedin: https://www.linkedin.com/company/python-rwanda/
+  instagram: https://www.instagram.com/pyrwanda/
+  instagram_handle: pyrwanda
+  email: hello@pythonrwanda.org
+
+hero:
+  title: Python Rwanda
+  eyebrow: Kigali · Rwanda
+  tagline: A Python community in Rwanda. Bootcamps, meetups, workshops and webinars for people who build with Python.
+  video: /media/video/mku-reel-bg.mp4
+  poster: /media/video/mku-reel-poster.jpg
+
+about:
+  heading: A community for everyone who writes Python in Rwanda.
+  short: Students, developers, researchers and data practitioners. We run bootcamps, meetups, workshops and webinars.
+  intro: Python Rwanda brings together students, developers, researchers and data practitioners to learn from each other, build things and grow the Python ecosystem in Rwanda.
+  mission: Make it easier for anyone in Rwanda to learn Python, use it in their work, and connect with the people building with it.
+  mission_detail: We do that through hands-on training, events that bring people into the same room, and by connecting the local community with the wider African and global Python community.
+  collage:
+    - /media/mku/PXL_20261022_093627801.jpg
+    - /media/july/IMG_1533.jpg
+    - /media/pycon/pycon-1.jpg
+    - /media/mku/PXL_20261022_094429110.jpg
+
+# Background photos for each page header and the blue "join" band.
+page_images:
+  events: /media/july/IMG_1538.jpg
+  about: /media/mku/1.jpg
+  get_involved: /media/mku/PXL_20261022_095935924.jpg
+  sponsors: /media/pycon/pycon-2.jpg
+  upcoming_fallback: /media/mku/PXL_20261022_095935924.jpg
+  join: /media/mku/PXL_20261022_100101271.jpg
+
+# Optional: forms for talk proposals and volunteers (Google Forms, Tally...).
+# When empty, the buttons open a pre-filled email instead.
+forms:
+  talk_proposal: ""
+  volunteer: ""
+  host_event: ""
